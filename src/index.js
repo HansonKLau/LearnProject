@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import {
-    getFirestore, collection, getDocs, addDoc, deleteDoc, doc
+    getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -21,19 +21,17 @@ const db = getFirestore();
 // collection reference
 const colRef = collection(db, 'accounts');
 
-// get collection data
-getDocs(colRef)
-    .then((snapshot) => {
-        let accounts = [];
-        snapshot.docs.forEach((doc) => {
-            // ... is the spread operator, it breaks doc.data() down into individual elements
-            accounts.push({ ...doc.data(), id: doc.id })
-        })
-        console.log(accounts);
+// real time collection data
+// function runs once initally, then runs each time the collection is modified
+// sends back a new snapshot of the collection
+onSnapshot(colRef, (snapshot) => {
+    let accounts = [];
+    snapshot.docs.forEach((doc) => {
+        // ... is the spread operator, it breaks doc.data() down into individual elements
+        accounts.push({ ...doc.data(), id: doc.id })
     })
-    .catch((e) => {
-        console.error(e.message);
-    })
+    console.log(accounts);
+})
 
 // adding a document
 const addUserForm = document.querySelector('.add');    // reference to the add form
