@@ -70,7 +70,9 @@
         <div class="col-6">
             <div class="row">
                 <h2>Count:</h2>
-                <h2 id="number"></h2>
+                <h2 id="globalNum"></h2>
+                <h2>Your Count:</h2>
+                <h2 id="indivNum">0</h2>
             </div>
             
         </div>
@@ -85,18 +87,6 @@
     <br>
     <br>
     <br>
-
-    <script>
-        function display() {
-            if (localStorage.getItem('count') === null) {
-            document.querySelector('#number').innerHTML = 0;
-            }
-            else {
-            document.querySelector('#number').innerHTML = Number(localStorage.getItem('count'));
-            }
-        }
-        display();
-    </script>
     <script src="bundle.js"></script>
 </body>
 </html>
