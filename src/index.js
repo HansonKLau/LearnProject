@@ -159,3 +159,40 @@ unsubBtn.addEventListener('click', () => {
     unsubDoc();
     unsubAuth();
 });
+
+
+// Button clicker stuff
+
+const resetBtn = document.querySelector('#reset');
+resetBtn.addEventListener('click', () => {
+    localStorage.setItem("count", 0);
+    document.querySelector('#number').innerHTML = Number(localStorage.getItem('count'));
+});
+
+const increaseBtn = document.querySelector('#increase');
+increaseBtn.addEventListener('click', () => {
+    if (localStorage.getItem('count') === null) {
+        document.querySelector('#number').innerHTML = 0;
+    }
+    else {
+        document.querySelector('#number').innerHTML = Number(localStorage.getItem('count'));
+        let value = document.querySelector('#number').innerHTML;
+        value++;
+        localStorage.setItem('count', value.toString());
+        document.querySelector('#number').innerHTML = Number(localStorage.getItem('count'));
+    }
+});
+
+const decreaseBtn = document.querySelector('#decrease');
+decreaseBtn.addEventListener('click', () => {
+    if (localStorage.getItem('count') === null) {
+        document.querySelector('#number').innerHTML = 0;
+    }
+    else {
+        document.querySelector('#number').innerHTML = Number(localStorage.getItem('count'));
+        let value = document.querySelector('#number').innerHTML;
+        value--;
+        localStorage.setItem('count', value.toString());
+        document.querySelector('#number').innerHTML = Number(localStorage.getItem('count'));
+    }
+});
