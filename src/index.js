@@ -4,13 +4,14 @@ import {
     addDoc, deleteDoc, doc,
     query, where,
     orderBy, serverTimestamp,
-    getDoc, updateDoc, setDoc, increment
+    getDoc, updateDoc, setDoc, increment, limit
 } from 'firebase/firestore'
 import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword, signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    reload
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -170,14 +171,14 @@ increaseBtn.addEventListener('click', () => {
     console.log('hihi');
     if (auth.currentUser != null) {
         const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
-        updateDoc(userDocRef, { count: increment(1), increase: increment(1) });
+        updateDoc(userDocRef, { count: increment(1) });
     }
     else {
         // TODO: hide your count
     }
 
     const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
-    updateDoc(globalDocRef, { count: increment(1), increase: increment(1) });
+    updateDoc(globalDocRef, { count: increment(1) });
 });
 
 
@@ -204,7 +205,8 @@ loginForm.addEventListener('submit', (e) => {
             getDoc(userDocRef)
                 .then((doc) => {
                     if (typeof doc.data().count === 'undefined') {
-                        setDoc(userDocRef, { count: 0 }, { merge: true });
+                        updateDoc(userDocRef, { count: 0, email: cred.user.email });
+                        location.reload();
                     }
                 });
 
@@ -215,20 +217,49 @@ loginForm.addEventListener('submit', (e) => {
         .catch((error) => {
             console.error(error.message);
         });
+    
 });
 
+// Logging out a user
 const logOutBtn = document.querySelector('#logout');
 logOutBtn.addEventListener('click', (e) => {
     console.log('here');
-    if (auth.currentUser != null) {
+    if (auth.currentUser !== null) {
         signOut(auth)
-        .then(() => {
-            console.log('Log out successful');
-            // auth = getAuth();
-            console.log(auth);
-        })
-        .catch((err) => {
-            console.error(err.message);
-        });
+            .then(() => {
+                console.log('Log out successful');
+            })
+            .catch((err) => {
+                console.error(err.message);
+            });
     }
 });
+
+// Updating the rankings
+const q = query(collection(db, 'indivCount'), orderBy('count', 'desc'), limit(5));
+onSnapshot(q, (snapshot) => {
+    // Looks for the top 5 users with the most clicks
+    let topUsers = [];
+    snapshot.docs.forEach((doc) => {
+        topUsers.push({ ...doc.data(), id: doc.id });
+    });
+
+    let tableRef = document.querySelector('.table');
+    for (let i = 0; i < topUsers.length; i++) { 
+        console.log('row' + (i + 1)  + "");
+        let row = document.querySelector('.row' + (i + 1) + "");
+        if (row.hidden) {
+            row.hidden = false;
+        }
+        let rankCell = tableRef.rows[i + 1].cells[0];
+        rankCell.innerHTML = "<b>" + (i + 1) + "</b>";
+
+        let nameCell = tableRef.rows[i + 1].cells[1];
+        const atIndex = topUsers[i].email.indexOf("@")
+        const name = topUsers[i].email.substring(0, atIndex);
+        nameCell.innerHTML = name;
+
+        let clicksCell = tableRef.rows[i + 1].cells[2];
+        clicksCell.innerHTML = topUsers[i].count;
+    }
+})
