@@ -27,7 +27,7 @@ initializeApp(firebaseConfig);
 
 // init services
 const db = getFirestore();
-const auth = getAuth();
+let auth = getAuth();
 
 // collection reference
 // const colRef = collection(db, 'accounts');
@@ -163,35 +163,21 @@ const auth = getAuth();
 
 // Button clicker stuff
 
-const resetBtn = document.querySelector('#reset');
-resetBtn.addEventListener('click', () => {
-    const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
-    updateDoc(userDocRef, { count: 0, reset: increment(1) });
-
-    const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
-    updateDoc(globalDocRef, { count: 0, reset: increment(1) });
-});
-
 // updates the user doc by increasing count and increase by 1
 // updates the global doc by 1
 const increaseBtn = document.querySelector('#increase');
 increaseBtn.addEventListener('click', () => {
-    const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
-    updateDoc(userDocRef, { count: increment(1), increase: increment(1) });
+    console.log('hihi');
+    if (auth.currentUser != null) {
+        const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
+        updateDoc(userDocRef, { count: increment(1), increase: increment(1) });
+    }
+    else {
+        // TODO: hide your count
+    }
 
     const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
     updateDoc(globalDocRef, { count: increment(1), increase: increment(1) });
-});
-
-// updates the user doc by decreasing count by 1 and increasing decrease by 1
-// updates the global doc by -1
-const decreaseBtn = document.querySelector('#decrease');
-decreaseBtn.addEventListener('click', () => {
-    const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
-    updateDoc(userDocRef, { count: increment(-1), decrease: increment(1) });
-
-    const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
-    updateDoc(globalDocRef, { count: increment(-1), decrease: increment(1) });
 });
 
 
@@ -207,7 +193,7 @@ onSnapshot(globalDocRef, (doc) => {
 const loginForm = document.querySelector('.login');
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
+    console.log("logged in");
     const email = loginForm.email.value;
     const password = loginForm.password.value;
     signInWithEmailAndPassword(auth, email, password)
@@ -226,7 +212,23 @@ loginForm.addEventListener('submit', (e) => {
                 document.querySelector('#indivNum').innerHTML = doc.data().count;
             });
         })
+        .catch((error) => {
+            console.error(error.message);
+        });
+});
+
+const logOutBtn = document.querySelector('#logout');
+logOutBtn.addEventListener('click', (e) => {
+    console.log('here');
+    if (auth.currentUser != null) {
+        signOut(auth)
+        .then(() => {
+            console.log('Log out successful');
+            // auth = getAuth();
+            console.log(auth);
+        })
         .catch((err) => {
             console.error(err.message);
         });
+    }
 });

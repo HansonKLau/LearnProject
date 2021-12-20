@@ -1,10 +1,12 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Button Clicker</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 
 <body>
@@ -19,31 +21,32 @@
         <div class="col-2"> </div>
     </nav>
 
-    <h1 style="margin-top: 4rem; margin-bottom: 3rem; font-size: 3rem;" class="text-center">Welcome to Button-Clicker</h1>
-    
+    <h1 style="margin-top: 4rem; margin-bottom: 3rem; font-size: 3rem;" class="text-center">Welcome to Button-Clicker
+    </h1>
+
     <!-- Leaderboard -->
     <div class="d-flex flex-row">
 
         <table class="table">
             <thead>
                 <tr>
-                  <th scope="col">Rank</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Clicks</th>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Clicks</th>
                 </tr>
-              </thead>
-              <tbody>
+            </thead>
+            <tbody>
                 <tr>
-                  <th scope="row">1</th>
-                  <td>exampleUser</td>
-                  <td>500</td>
+                    <th scope="row">1</th>
+                    <td>exampleUser</td>
+                    <td>500</td>
                 </tr>
                 <tr>
-                  <th scope="row">2</th>
-                  <td>exampleUser2</td>
-                  <td>200</td>
+                    <th scope="row">2</th>
+                    <td>exampleUser2</td>
+                    <td>200</td>
                 </tr>
-              </tbody>
+            </tbody>
         </table>
 
         <form class="login col-4 text-center">
@@ -51,65 +54,47 @@
 
             <div style="padding: 1rem;" class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" placeholder="Enter email" name="email" required>
+                <input type="email" placeholder="Enter email" name="email" required>
             </div>
             <div style="padding: 1rem;" class="form-group">
                 <label for="password">Password:</label>
-                <input type="text" placeholder="Enter password" name="password" required>
+                <input type="password" placeholder="Enter password" name="password" required>
             </div>
-        
+
             <button class="btn btn-primary">Login</button>
         </form>
+        <button class="btn btn-danger" id="logout">Log out</button>
     </div>
 
-    <form class="update">
-        <label for="id">Update:</label>
-        <input type="text" name="id" required>
-        
-        <button>Update a user</button>
-    </form>
-    
-    <h2 style="margin-bottom: 2rem;">Firebase Auth</h2>
+
+    <!-- <h2 style="margin-bottom: 2rem;">Firebase Auth</h2>
     <form class="signup">
         <label for="email">Email</label>
         <input type="email" name="email">
         <label for="password">Password</label>
         <input type="password" name="password">
         <button>Signup</button>
-    </form>
+    </form> -->
 
-    <form class="login">
-        <label for="email">Email</label>
-        <input type="email" name="email">
-        <label for="password">Password</label>
-        <input type="password" name="password">
-        <button>Log In</button>
-    </form>
 
-    <button class="logout">Log out</button>
-
-    <h2>Unsubscribing</h2>
-    <button class="unsub">Unsubscribe from db/auth changes</button>
 
     <div class="row" style="margin-top: 5rem;">
         <div class="col-2">
-        <!-- just for space -->
+            <!-- just for space -->
         </div>
         <div class="col-4">
             <button type="button" class="btn btn-primary" id="increase">INCREASE</button>
-            <button type="button" class="btn btn-primary" id="decrease">DECREASE</button>
-            <button type="button" class="btn btn-primary" id="reset">RESET</button>
         </div>
         <div class="col-6">
             <div class="row">
-                <h2>Count:</h2>
+                <h2>Global Count:</h2>
                 <h2 id="globalNum"></h2>
                 <h2>Your Count:</h2>
                 <h2 id="indivNum">0</h2>
             </div>
-            
+
         </div>
-        
+
     </div>
     <br>
     <br>
@@ -122,4 +107,5 @@
     <br>
     <script src="bundle.js"></script>
 </body>
+
 </html>
