@@ -8,24 +8,59 @@
 </head>
 
 <body>
-    <h1>Getting Started with Firebase 9</h1>
-    <h2>Firebase Firestore</h2>
+
+    <nav class="navbar fixed-top navbar-dark bg-dark text-white text-center">
+        <div class="col-3 navbar-brand">Button-Clicker</div>
+        <div class="col-6"> </div>
+        <div class="col-2 d-flex flex-row">
+            <a style="text-decoration: none; color: white;" href="signup.html" class="p-2" target="_blank">Sign-Up</a>
+            <div class="p-2">Login</div>
+        </div>
+        <div class="col-2"> </div>
+    </nav>
+
+    <h1 style="margin-top: 4rem; margin-bottom: 3rem; font-size: 3rem;" class="text-center">Welcome to Button-Clicker</h1>
     
-    <form class="add">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required>
-        <label for="clicks">Clicks:</label>
-        <input type="text" name="clicks" required>
+    <!-- Leaderboard -->
+    <div class="d-flex flex-row">
+
+        <table class="table">
+            <thead>
+                <tr>
+                  <th scope="col">Rank</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Clicks</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>exampleUser</td>
+                  <td>500</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>exampleUser2</td>
+                  <td>200</td>
+                </tr>
+              </tbody>
+        </table>
+
+        <form class="login col-4 text-center">
+            <h2 style="margin-bottom: 2rem;">Login</h2>
+
+            <div style="padding: 1rem;" class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" placeholder="Enter email" name="email" required>
+            </div>
+            <div style="padding: 1rem;" class="form-group">
+                <label for="password">Password:</label>
+                <input type="text" placeholder="Enter password" name="password" required>
+            </div>
         
-        <button>Add a new user</button>
-    </form>
-    
-    <form class="delete">
-        <label for="id">Document id:</label>
-        <input type="text" name="id" required>
-    
-        <button>Delete a user</button>
-    </form>
+            <button class="btn btn-primary">Login</button>
+        </form>
+    </div>
 
     <form class="update">
         <label for="id">Update:</label>
@@ -34,7 +69,7 @@
         <button>Update a user</button>
     </form>
     
-    <h2>Firebase Auth</h2>
+    <h2 style="margin-bottom: 2rem;">Firebase Auth</h2>
     <form class="signup">
         <label for="email">Email</label>
         <input type="email" name="email">
@@ -55,8 +90,6 @@
 
     <h2>Unsubscribing</h2>
     <button class="unsub">Unsubscribe from db/auth changes</button>
-
-    <h1 style="margin-top: 2rem; font-size: 3rem;" class="text-center">Welcome to Button-Clicker</h1>
 
     <div class="row" style="margin-top: 5rem;">
         <div class="col-2">
