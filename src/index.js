@@ -161,13 +161,11 @@ let auth = getAuth();
 //     unsubAuth();
 // });
 
-
-// Button clicker stuff
-
-// updates the user doc by increasing count and increase by 1
-// updates the global doc by 1
-
+// Code for index.html
 if (document.body.id === 'index') {
+
+    // Updates the user doc by increasing count and increase by 1
+    // Updates the global doc by 1
     const increaseBtn = document.querySelector('#increase');
     increaseBtn.addEventListener('click', () => {
         console.log('hihi');
@@ -227,6 +225,7 @@ if (document.body.id === 'index') {
             .catch((error) => {
                 console.error(error.message);
             });
+        
     });
 
     // Logging out a user
@@ -260,7 +259,7 @@ if (document.body.id === 'index') {
             topUsers.push({ ...doc.data(), id: doc.id });
         });
 
-        // we can change to use username instead of substring from email
+        // Shows the rows occupied by users with the appropriate data in the cells
         let tableRef = document.querySelector('.table');
         for (let i = 0; i < topUsers.length; i++) { 
             console.log('row' + (i + 1)  + "");
@@ -272,9 +271,7 @@ if (document.body.id === 'index') {
             rankCell.innerHTML = "<b>" + (i + 1) + "</b>";
 
             let nameCell = tableRef.rows[i + 1].cells[1];
-            const atIndex = topUsers[i].email.indexOf("@")
-            const name = topUsers[i].email.substring(0, atIndex);
-            nameCell.innerHTML = name;
+            nameCell.innerHTML = topUsers[i].username;
 
             let clicksCell = tableRef.rows[i + 1].cells[2];
             clicksCell.innerHTML = topUsers[i].count;
