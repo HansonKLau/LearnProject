@@ -173,10 +173,7 @@ if (document.body.id === 'index') {
             const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
             updateDoc(userDocRef, { count: increment(1) });
         }
-        else {
-            // TODO: hide your count
-        }
-
+    
         const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
         updateDoc(globalDocRef, { count: increment(1) });
     });
