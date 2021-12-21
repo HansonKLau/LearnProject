@@ -199,9 +199,24 @@ if (document.body.id === 'index') {
         const password = loginForm.password.value;
         signInWithEmailAndPassword(auth, email, password)
             .then((cred) => {
+                const logOutSect = document.querySelector('#logout-section')
+                logOutSect.classList.toggle("hide-private");
+                const navbarItems = document.querySelector('#navbar-items');
+                navbarItems.classList.add("hide-private");
+                const privDiv = document.querySelector('#privDiv');
+                privDiv.classList.toggle("hide-private");
                 console.log('user logged in: ', cred.user);
+                loginForm.reset();
+                loginForm.classList.add("hide-private");
                 const userDocRef = doc(db, 'indivCount', cred.user.uid);    // get a reference of the user's doc
-                setDoc(userDocRef, { lastLogIn: serverTimestamp() }, { merge: true });    // updates doc or creates it if it doesn't exist
+                setDoc(userDocRef, { lastUpdated: serverTimestamp() }, { merge: true });    // updates doc or creates it if it doesn't exist
+                getDoc(userDocRef)
+                    .then((doc) => {
+                        if (typeof doc.data().count === 'undefined') {
+                            updateDoc(userDocRef, { count: 0, email: cred.user.email });
+                            location.reload();
+                        }
+                    });
 
                 onSnapshot(userDocRef, (doc) => {
                     document.querySelector('#indivNum').innerHTML = doc.data().count;
@@ -220,6 +235,13 @@ if (document.body.id === 'index') {
         if (auth.currentUser !== null) {
             signOut(auth)
                 .then(() => {
+                    const privDiv = document.querySelector('#privDiv');
+                    privDiv.classList.toggle("hide-private");
+                    loginForm.classList.remove("hide-private");
+                    const logOutSect = document.querySelector('#logout-section')
+                    logOutSect.classList.toggle("hide-private");
+                    const navbarItems = document.querySelector('#navbar-items');
+                    navbarItems.classList.remove("hide-private");
                     console.log('Log out successful');
                 })
                 .catch((err) => {
