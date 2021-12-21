@@ -201,6 +201,8 @@ loginForm.addEventListener('submit', (e) => {
         .then((cred) => {
             const logOutBtn = document.querySelector('#logout');
             logOutBtn.classList.toggle("hide-private");
+            const navbarItems = document.querySelector('#navbar-items');
+            navbarItems.classList.add("hide-private");
             const privDiv = document.querySelector('#privDiv');
             privDiv.classList.toggle("hide-private");
             console.log('user logged in: ', cred.user);
@@ -236,6 +238,8 @@ logOutBtn.addEventListener('click', (e) => {
                 privDiv.classList.toggle("hide-private");
                 loginForm.classList.remove("hide-private");
                 logOutBtn.classList.toggle("hide-private");
+                const navbarItems = document.querySelector('#navbar-items');
+                navbarItems.classList.remove("hide-private");
                 console.log('Log out successful');
             })
             .catch((err) => {
