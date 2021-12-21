@@ -161,105 +161,128 @@ let auth = getAuth();
 //     unsubAuth();
 // });
 
+// Code for index.html
+if (document.body.id === 'index') {
 
-// Button clicker stuff
+    // Updates the user doc by increasing count and increase by 1
+    // Updates the global doc by 1
+    const increaseBtn = document.querySelector('#increase');
+    increaseBtn.addEventListener('click', () => {
+        console.log('hihi');
+        if (auth.currentUser != null) {
+            const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
+            updateDoc(userDocRef, { count: increment(1) });
+        }
+        else {
+            // TODO: hide your count
+        }
 
-// updates the user doc by increasing count and increase by 1
-// updates the global doc by 1
-const increaseBtn = document.querySelector('#increase');
-increaseBtn.addEventListener('click', () => {
-    console.log('hihi');
-    if (auth.currentUser != null) {
-        const userDocRef = doc(db, 'indivCount', auth.currentUser.uid);
-        updateDoc(userDocRef, { count: increment(1) });
-    }
-    else {
-        // TODO: hide your count
-    }
-
-    const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
-    updateDoc(globalDocRef, { count: increment(1) });
-});
-
-
-// Putting it all together
-
-// Displays the global count initially and whenever it is changed
-const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
-onSnapshot(globalDocRef, (doc) => {
-    document.querySelector('#globalNum').innerHTML = doc.data().count;
-});
-
-// When the user logs in, their count will be displayed and will be updated whenever they click a button
-const loginForm = document.querySelector('.login');
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    console.log("logged in");
-    const email = loginForm.email.value;
-    const password = loginForm.password.value;
-    signInWithEmailAndPassword(auth, email, password)
-        .then((cred) => {
-            console.log('user logged in: ', cred.user);
-            const userDocRef = doc(db, 'indivCount', cred.user.uid);    // get a reference of the user's doc
-            setDoc(userDocRef, { lastUpdated: serverTimestamp() }, { merge: true });    // updates doc or creates it if it doesn't exist
-            getDoc(userDocRef)
-                .then((doc) => {
-                    if (typeof doc.data().count === 'undefined') {
-                        updateDoc(userDocRef, { count: 0, email: cred.user.email });
-                        location.reload();
-                    }
-                });
-
-            onSnapshot(userDocRef, (doc) => {
-                document.querySelector('#indivNum').innerHTML = doc.data().count;
-            });
-        })
-        .catch((error) => {
-            console.error(error.message);
-        });
-    
-});
-
-// Logging out a user
-const logOutBtn = document.querySelector('#logout');
-logOutBtn.addEventListener('click', (e) => {
-    console.log('here');
-    if (auth.currentUser !== null) {
-        signOut(auth)
-            .then(() => {
-                console.log('Log out successful');
-            })
-            .catch((err) => {
-                console.error(err.message);
-            });
-    }
-});
-
-// Updating the rankings
-const q = query(collection(db, 'indivCount'), orderBy('count', 'desc'), limit(5));
-onSnapshot(q, (snapshot) => {
-    // Looks for the top 5 users with the most clicks
-    let topUsers = [];
-    snapshot.docs.forEach((doc) => {
-        topUsers.push({ ...doc.data(), id: doc.id });
+        const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
+        updateDoc(globalDocRef, { count: increment(1) });
     });
 
-    let tableRef = document.querySelector('.table');
-    for (let i = 0; i < topUsers.length; i++) { 
-        console.log('row' + (i + 1)  + "");
-        let row = document.querySelector('.row' + (i + 1) + "");
-        if (row.hidden) {
-            row.hidden = false;
+
+    // Putting it all together
+
+    // Displays the global count initially and whenever it is changed
+    const globalDocRef = doc(db, 'globalCount', '2I1yItBId9kI9IjnOkxA');
+    onSnapshot(globalDocRef, (doc) => {
+        document.querySelector('#globalNum').innerHTML = doc.data().count;
+    });
+
+    // When the user logs in, their count will be displayed and will be updated whenever they click a button
+    const loginForm = document.querySelector('.login');
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log("logged in");
+        const email = loginForm.email.value;
+        const password = loginForm.password.value;
+        signInWithEmailAndPassword(auth, email, password)
+            .then((cred) => {
+                console.log('user logged in: ', cred.user);
+                const userDocRef = doc(db, 'indivCount', cred.user.uid);    // get a reference of the user's doc
+                setDoc(userDocRef, { lastLogIn: serverTimestamp() }, { merge: true });    // updates doc or creates it if it doesn't exist
+
+                onSnapshot(userDocRef, (doc) => {
+                    document.querySelector('#indivNum').innerHTML = doc.data().count;
+                });
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+        
+    });
+
+    // Logging out a user
+    const logOutBtn = document.querySelector('#logout');
+    logOutBtn.addEventListener('click', (e) => {
+        console.log('here');
+        if (auth.currentUser !== null) {
+            signOut(auth)
+                .then(() => {
+                    console.log('Log out successful');
+                })
+                .catch((err) => {
+                    console.error(err.message);
+                });
         }
-        let rankCell = tableRef.rows[i + 1].cells[0];
-        rankCell.innerHTML = "<b>" + (i + 1) + "</b>";
+    });
 
-        let nameCell = tableRef.rows[i + 1].cells[1];
-        const atIndex = topUsers[i].email.indexOf("@")
-        const name = topUsers[i].email.substring(0, atIndex);
-        nameCell.innerHTML = name;
+    // Updating the rankings
+    const q = query(collection(db, 'indivCount'), orderBy('count', 'desc'), limit(5));
+    onSnapshot(q, (snapshot) => {
+        // Looks for the top 5 users with the most clicks
+        let topUsers = [];
+        snapshot.docs.forEach((doc) => {
+            topUsers.push({ ...doc.data(), id: doc.id });
+        });
 
-        let clicksCell = tableRef.rows[i + 1].cells[2];
-        clicksCell.innerHTML = topUsers[i].count;
-    }
-})
+        // Shows the rows occupied by users with the appropriate data in the cells
+        let tableRef = document.querySelector('.table');
+        for (let i = 0; i < topUsers.length; i++) { 
+            console.log('row' + (i + 1)  + "");
+            let row = document.querySelector('.row' + (i + 1) + "");
+            if (row.hidden) {
+                row.hidden = false;
+            }
+            let rankCell = tableRef.rows[i + 1].cells[0];
+            rankCell.innerHTML = "<b>" + (i + 1) + "</b>";
+
+            let nameCell = tableRef.rows[i + 1].cells[1];
+            nameCell.innerHTML = topUsers[i].username;
+
+            let clicksCell = tableRef.rows[i + 1].cells[2];
+            clicksCell.innerHTML = topUsers[i].count;
+        }
+    })
+}
+
+// Code for signup.html
+if (document.body.id === 'signup') {
+    
+    // Signing up
+    const signUpRef = document.querySelector('.add');
+    signUpRef.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const email = signUpRef.email.value;
+        const password = signUpRef.password.value;
+        const username = signUpRef.username.value;
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((cred) => {
+                const resultMessage = document.querySelector('#resultMessage');
+                resultMessage.style.color = 'green';
+                resultMessage.innerHTML = 'Success!';
+                
+                // Creates an indivCount document for the user
+                const userDocRef = doc(db, 'indivCount', cred.user.uid);
+                setDoc(userDocRef, { count: 0, email: cred.user.email, username: username });
+
+            })
+            .catch((error) => {
+                const resultMessage = document.querySelector('#resultMessage');
+                resultMessage.style.color = 'red';
+                resultMessage.innerHTML = error.message;
+            })
+    })
+}
