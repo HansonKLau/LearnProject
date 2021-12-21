@@ -199,8 +199,8 @@ loginForm.addEventListener('submit', (e) => {
     const password = loginForm.password.value;
     signInWithEmailAndPassword(auth, email, password)
         .then((cred) => {
-            const logOutBtn = document.querySelector('#logout');
-            logOutBtn.classList.toggle("hide-private");
+            const logOutSect = document.querySelector('#logout-section')
+            logOutSect.classList.toggle("hide-private");
             const navbarItems = document.querySelector('#navbar-items');
             navbarItems.classList.add("hide-private");
             const privDiv = document.querySelector('#privDiv');
@@ -237,7 +237,8 @@ logOutBtn.addEventListener('click', (e) => {
                 const privDiv = document.querySelector('#privDiv');
                 privDiv.classList.toggle("hide-private");
                 loginForm.classList.remove("hide-private");
-                logOutBtn.classList.toggle("hide-private");
+                const logOutSect = document.querySelector('#logout-section')
+                logOutSect.classList.toggle("hide-private");
                 const navbarItems = document.querySelector('#navbar-items');
                 navbarItems.classList.remove("hide-private");
                 console.log('Log out successful');
