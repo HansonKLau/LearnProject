@@ -199,7 +199,13 @@ loginForm.addEventListener('submit', (e) => {
     const password = loginForm.password.value;
     signInWithEmailAndPassword(auth, email, password)
         .then((cred) => {
+            const logOutBtn = document.querySelector('#logout');
+            logOutBtn.classList.toggle("hide-private");
+            const privDiv = document.querySelector('#privDiv');
+            privDiv.classList.toggle("hide-private");
             console.log('user logged in: ', cred.user);
+            loginForm.reset();
+            loginForm.classList.add("hide-private");
             const userDocRef = doc(db, 'indivCount', cred.user.uid);    // get a reference of the user's doc
             setDoc(userDocRef, { lastUpdated: serverTimestamp() }, { merge: true });    // updates doc or creates it if it doesn't exist
             getDoc(userDocRef)
@@ -217,7 +223,6 @@ loginForm.addEventListener('submit', (e) => {
         .catch((error) => {
             console.error(error.message);
         });
-    
 });
 
 // Logging out a user
@@ -227,6 +232,10 @@ logOutBtn.addEventListener('click', (e) => {
     if (auth.currentUser !== null) {
         signOut(auth)
             .then(() => {
+                const privDiv = document.querySelector('#privDiv');
+                privDiv.classList.toggle("hide-private");
+                loginForm.classList.remove("hide-private");
+                logOutBtn.classList.toggle("hide-private");
                 console.log('Log out successful');
             })
             .catch((err) => {
@@ -244,6 +253,7 @@ onSnapshot(q, (snapshot) => {
         topUsers.push({ ...doc.data(), id: doc.id });
     });
 
+    // we can change to use username instead of substring from email
     let tableRef = document.querySelector('.table');
     for (let i = 0; i < topUsers.length; i++) { 
         console.log('row' + (i + 1)  + "");
