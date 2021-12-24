@@ -16,13 +16,50 @@
         <div class="col-2 navbar-brand">Button-Clicker</div>
         <div class="col-6"> </div>
         <div class="col-2 d-flex flex-row">
+            <p id="welcome-user"></p>
             <div id="navbar-items">
-                <a style="text-decoration: none; color: white;" href="signup.html" class="p-2" target="_blank">Sign-Up</a>
+                <a id="sign-up-button" type="button" style="text-decoration: none; color: white;" class="p-2">Sign-Up</a>
+                <!-- <a style="text-decoration: none; color: white;" href="signup.html" class="p-2" target="_blank">Sign-Up</a> -->
                 <a style="text-decoration: none; color: white;" href="#loginForm" class="p-2">Login</a>
             </div>
         </div>
         <div class="col-2"> </div>
     </nav>
+
+    <!-- testing-->
+    <div style="margin-top: 5rem;" class="collapsing" id="sign-up-dropdown">
+        <div class="card">
+            <body id="signup">
+    
+                <h2 style="font: 3rem; margin-top: 4rem;" class="text-center">Sign Up</h2>
+            
+                <br>
+                <br>
+            
+                <div style="background-color: aliceblue; padding: 1rem;" class= "text-center">
+                    <form class="add">
+                        <div style="padding: 1rem;" class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" placeholder="Enter username" name="username" required >
+                        </div>
+                        <div style="padding: 1rem;" class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" placeholder="Enter password" name="password" required>
+                        </div>
+                        <div style="padding: 1rem;" class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" placeholder="Enter email" name="email" required>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary">Sign-Up</button>
+                    </form>
+                </div>
+                <h2 id="resultMessage"></h2>
+                <!-- <script src="bundle.js"></script> -->
+            </body>
+        </div>
+    </div>
+  <!-- testing-->  
 
     <h1 style="margin-top: 4rem; margin-bottom: 3rem; font-size: 3rem;" class="text-center">Welcome to Button-Clicker
     </h1>

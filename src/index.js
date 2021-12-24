@@ -162,7 +162,7 @@ let auth = getAuth();
 // });
 
 // Code for index.html
-if (document.body.id === 'index') {
+////////////////////////// if (document.body.id === 'index') {
 
     // Updates the user doc by increasing count and increase by 1
     // Updates the global doc by 1
@@ -205,7 +205,19 @@ if (document.body.id === 'index') {
                 console.log('user logged in: ', cred.user);
                 loginForm.reset();
                 loginForm.classList.add("hide-private");
+                
                 const userDocRef = doc(db, 'indivCount', cred.user.uid);    // get a reference of the user's doc
+
+                getDoc(userDocRef)
+                    .then((doc) => {
+                        let username = doc.data().username;
+                        const welcome = document.querySelector('#welcome-user');
+                        welcome.style.color = 'white';
+                        console.log('username here');
+                        console.log(username);
+                        welcome.innerHTML = 'Welcome ' + username;
+                    })
+
                 setDoc(userDocRef, { lastUpdated: serverTimestamp() }, { merge: true });    // updates doc or creates it if it doesn't exist
                 getDoc(userDocRef)
                     .then((doc) => {
@@ -239,6 +251,9 @@ if (document.body.id === 'index') {
                     logOutSect.classList.toggle("hide-private");
                     const navbarItems = document.querySelector('#navbar-items');
                     navbarItems.classList.remove("hide-private");
+                    const welcome = document.querySelector('#welcome-user');
+                    welcome.style.color = 'white';
+                    welcome.innerHTML = '';
                     console.log('Log out successful');
                 })
                 .catch((err) => {
@@ -274,10 +289,10 @@ if (document.body.id === 'index') {
             clicksCell.innerHTML = topUsers[i].count;
         }
     })
-}
+///////////////////////////////////////////////////}
 
 // Code for signup.html
-if (document.body.id === 'signup') {
+/////////////////////////////////if (document.body.id === 'signup') {
     
     // Signing up
     const signUpRef = document.querySelector('.add');
@@ -292,16 +307,75 @@ if (document.body.id === 'signup') {
                 const resultMessage = document.querySelector('#resultMessage');
                 resultMessage.style.color = 'green';
                 resultMessage.innerHTML = 'Success!';
+                setTimeout(function(){
+                    const signUpDropDown = document.querySelector('#sign-up-dropdown');
+                    signUpDropDown.classList.toggle("collapsing");
+                    resultMessage.innerHTML = '';
+                },2000);
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((cred) => {
+                        const logOutSect = document.querySelector('#logout-section')
+                        logOutSect.classList.toggle("hide-private");
+                        const navbarItems = document.querySelector('#navbar-items');
+                        navbarItems.classList.add("hide-private");
+                        const privDiv = document.querySelector('#privDiv');
+                        privDiv.classList.toggle("hide-private");
+                        console.log('user logged in: ', cred.user);
+                        loginForm.reset();
+                        loginForm.classList.add("hide-private");
+                        
+                        const userDocRef = doc(db, 'indivCount', cred.user.uid);    // get a reference of the user's doc
+
+                        getDoc(userDocRef)
+                            .then((doc) => {
+                                let username = doc.data().username;
+                                const welcome = document.querySelector('#welcome-user');
+                                welcome.style.color = 'white';
+                                console.log('username here');
+                                console.log(username);
+                                welcome.innerHTML = 'Welcome ' + username;
+                            })
+
+                setDoc(userDocRef, { lastUpdated: serverTimestamp() }, { merge: true });    // updates doc or creates it if it doesn't exist
+                getDoc(userDocRef)
+                    .then((doc) => {
+                        if (typeof doc.data().count === 'undefined') {
+                            updateDoc(userDocRef, { count: 0, email: cred.user.email });
+                            location.reload();
+                        }
+                    });
+
+                onSnapshot(userDocRef, (doc) => {
+                    document.querySelector('#indivNum').innerHTML = doc.data().count;
+                });
+            })
+            .catch((error) => {
+                console.error(error.message);
+            });
+
                 
                 // Creates an indivCount document for the user
                 const userDocRef = doc(db, 'indivCount', cred.user.uid);
                 setDoc(userDocRef, { count: 0, email: cred.user.email, username: username });
-
+                signUpRef.reset();
             })
+            // this catches if email is repeated, 
+            // TODO: make it so that same username is also an error
             .catch((error) => {
                 const resultMessage = document.querySelector('#resultMessage');
                 resultMessage.style.color = 'red';
                 resultMessage.innerHTML = error.message;
+                signUpRef.reset();
             })
     })
-}
+/////////////////////////////////////////}
+
+const signUpBtn = document.querySelector('#sign-up-button');
+signUpBtn.addEventListener('click', () => {
+    console.log('testing');
+    const signUpDropDown = document.querySelector('#sign-up-dropdown');
+    signUpDropDown.classList.toggle("collapsing");
+})
+
+    
