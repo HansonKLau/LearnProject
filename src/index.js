@@ -322,9 +322,8 @@ let auth = getAuth();
                         const privDiv = document.querySelector('#privDiv');
                         privDiv.classList.toggle("hide-private");
                         console.log('user logged in: ', cred.user);
-                        loginForm.reset();
                         loginForm.classList.add("hide-private");
-                        
+                        signUpRef.reset();
                         const userDocRef = doc(db, 'indivCount', cred.user.uid);    // get a reference of the user's doc
 
                         getDoc(userDocRef)
@@ -370,12 +369,16 @@ let auth = getAuth();
             })
     })
 /////////////////////////////////////////}
+const signUpDropDown = document.querySelector('#sign-up-dropdown');
 
 const signUpBtn = document.querySelector('#sign-up-button');
 signUpBtn.addEventListener('click', () => {
-    console.log('testing');
-    const signUpDropDown = document.querySelector('#sign-up-dropdown');
-    signUpDropDown.classList.toggle("collapsing");
+    signUpDropDown.classList.toggle("collapse");
 })
 
-    
+const cancelSignUp = document.querySelector('#cancel-signup');
+cancelSignUp.addEventListener('click', () => {
+    const signUpRef = document.querySelector('.add');
+    signUpRef.reset();
+    signUpDropDown.classList.toggle("collapse");
+})
